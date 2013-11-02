@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="https://sdk.amazonaws.com/js/aws-sdk-2.0.0-rc1.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script>
+            AWS.config.update({accessKeyId: 'YOUR_ACCESS_KEY', secretAccessKey: 'YOUR_SECRET_KEY'});
+            var s3BucketName = 'YOUR_BUCKET_NAME';
+            var s3RegionName = 'ap-northeast-1';
+            
+            function uploadFile() {
+                var s3 = new AWS.S3({params: {Bucket: s3BucketName, Region: s3RegionName}});
+
+                var file = document.getElementById('fileToUpload').files[0];
+                if (file) {
+                    s3.putObject({Key: file.name, ContentType: file.type, Body: file, ACL: "public-read"},
+                    function(err, data) {
+                        if (data !== null) {
+                            alert("アップロード成功");
+                        }
+                        else {
+                            alert("アップロード失敗");
+                        }
+                    });
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <input type="file" id="fileToUpload"/>
+        <button onclick="uploadFile()">Upload to S3</button>
+    </body>
+</html>
